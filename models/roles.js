@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     description  : {type: DataTypes.STRING, allowNull: false, unique: false},
   });
 
-  Model.prototype.toWeb = function (pw) {
+  Roles.prototype.toWeb = function (pw) {
       let json = this.toJSON();
       return json;
   };
