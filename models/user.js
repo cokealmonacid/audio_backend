@@ -9,8 +9,7 @@ const jwt           	= require('jsonwebtoken');
 module.exports = (sequelize, DataTypes) => {
   	var User = sequelize.define('User', {
     	email    : {type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: {msg: "Email invalid."} }},
-    	password : {type: DataTypes.STRING, allowNull: false, unique: false},
-    	token	 : {type: DataTypes.STRING, allowNull: true, unique: false},
+    	password : {type: DataTypes.STRING, allowNull: false, unique: false}
   	});
 
 	User.associate = function(models) {

@@ -12,6 +12,8 @@ router.get('/', function(req, res, next) {
   res.json({status:"success", message:"Parcel Pending API", data:{"version_number":"v1.0.0"}})
 });
 
-router.post(    '/users',           UserController.create);   
+router.post(    '/users',           UserController.create);
+router.get(     '/users',           passport.authenticate('jwt', {session:false}), UserController.get);   
+router.post(    '/users/login',     UserController.login);
 
 module.exports = router;
