@@ -18,5 +18,6 @@ router.get(     '/users',           passport.authenticate('jwt', {session:false}
 router.post(    '/users/login',     UserController.login);
 
 router.post(	'/audios',			passport.authenticate('jwt', {session:false}), AudioController.create);
+router.get(		'/audios',			passport.authenticate('jwt', {session:false}), AudioController.getAll);
 
 module.exports = router;
