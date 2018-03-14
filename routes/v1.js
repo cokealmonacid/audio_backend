@@ -5,6 +5,7 @@ const passport      	= require('passport');
 const path              = require('path');
 
 const UserController 	= require('./../controllers/UserController');
+const AudioController 	= require('./../controllers/AudioController');
 
 require('./../middleware/passport')(passport)
 /* GET home page. */
@@ -15,5 +16,7 @@ router.get('/', function(req, res, next) {
 router.post(    '/users',           UserController.create);
 router.get(     '/users',           passport.authenticate('jwt', {session:false}), UserController.get);   
 router.post(    '/users/login',     UserController.login);
+
+router.post(	'/audios',			passport.authenticate('jwt', {session:false}), AudioController.create);
 
 module.exports = router;
