@@ -43,3 +43,13 @@ const getAll = async function(req, res){
 	return ReS(res, {audios: audios_json});
 }
 module.exports.getAll = getAll;
+
+const remove = async function(req, res){
+	let audio, err;
+	audio = req.params.audio_id;
+
+	console.log(audio);
+
+	// [err, audio] = await to(Audio.destroy({where: {}}));
+}
+module.exports.remove = remove;

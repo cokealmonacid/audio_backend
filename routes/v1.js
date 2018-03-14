@@ -17,7 +17,8 @@ router.post(    '/users',           UserController.create);
 router.get(     '/users',           passport.authenticate('jwt', {session:false}), UserController.get);   
 router.post(    '/users/login',     UserController.login);
 
-router.post(	'/audios',			passport.authenticate('jwt', {session:false}), AudioController.create);
-router.get(		'/audios',			passport.authenticate('jwt', {session:false}), AudioController.getAll);
+router.post(	'/audios',			 passport.authenticate('jwt', {session:false}), AudioController.create);
+router.get(		'/audios',			 passport.authenticate('jwt', {session:false}), AudioController.getAll);
+router.delete(  '/audios/:audio_id', passport.authenticate('jwt', {session:false}), AudioController.remove);
 
 module.exports = router;
