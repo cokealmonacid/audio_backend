@@ -1,6 +1,7 @@
 const express 			= require('express');
 const router 			= express.Router();
 
+const custom 	        = require('./../middleware/custom');
 const passport      	= require('passport');
 const path              = require('path');
 
@@ -19,6 +20,6 @@ router.post(    '/users/login',     UserController.login);
 
 router.post(	'/audios',			 passport.authenticate('jwt', {session:false}), AudioController.create);
 router.get(		'/audios',			 passport.authenticate('jwt', {session:false}), AudioController.getAll);
-router.delete(  '/audios/:audio_id', passport.authenticate('jwt', {session:false}), AudioController.remove);
+router.delete(  '/audios/:audio_id', passport.authenticate('jwt', {session:false}), custom.audios, AudioController.remove);
 
 module.exports = router;

@@ -46,10 +46,11 @@ module.exports.getAll = getAll;
 
 const remove = async function(req, res){
 	let audio, err;
-	audio = req.params.audio_id;
+	audio = req.audio;
 
-	console.log(audio);
+    [err, audio] = await to(audio.destroy());
+    if(err) return ReE(res, 'Un error se ha producido al intentar eliminar una grabación de audio');
 
-	// [err, audio] = await to(Audio.destroy({where: {}}));
+    return ReS(res, {message:'Grabación de audio eliminada'}, 204);	
 }
 module.exports.remove = remove;
