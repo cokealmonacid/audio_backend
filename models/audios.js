@@ -3,7 +3,7 @@
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Audios', {
     content     : {type: DataTypes.TEXT, allowNull: false}, 
-    Spectre     : {type: DataTypes.FLOAT, allowNull: true},
+    spectre     : {type: DataTypes.FLOAT, allowNull: true},
     code        : {type: DataTypes.STRING, allowNull: false},
   });
 
