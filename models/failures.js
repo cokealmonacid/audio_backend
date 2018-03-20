@@ -12,5 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       	this.Transformers = this.belongsTo(models.Transformers);
   	};
 
+	Model.prototype.toWeb = function (pw) {
+	    let json = this.toJSON();
+	    return json;
+	};
+
   	return Model;
 };

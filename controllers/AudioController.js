@@ -1,7 +1,7 @@
 const Audio       = require('../models').Audios;
 const Transformer = require('../models').Transformers;
 
-const fftService   	  = require('./../services/fftService');
+const fftService  = require('./../services/fftService');
 
 
 const create = async function(req, res){
