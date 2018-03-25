@@ -4,17 +4,33 @@ let Complex = require('complex.js');
 
 const analysisFFT = function(input){
 
+	/* 
+		Get the input on base64 encoded and create a new buffer 
+		then load the input and transform to sampled data
+	*/
 	let buffer 		= new Buffer(input, 'base64');
 	let result = wav.decode(buffer);
 
+
+	/* Define fs (sample rate) and y1 (channel data) */
+	let fs = result.sampleRate;
 	let y1 = result.channelData;
 	y1     = y1[0];
 
-	let img = Complex.i;
-	let len = y1.length;
+
+	/* Create a imaginary number, then create a array full of zeros */
+	let img    = Complex.i;
+	let len    = y1.length;
 	let arrayI = new Array(len);
 	arrayI.fill(0);
 
+	/* Create a new frequency array */
+	let frec   = [];
+	for (let i = 0; i < (len/2); i++) {
+		frec[i] = fs*(y1[i]/len);
+	}
+
+	/* Fast fourier transform */
 	fft.transform(y1, arrayI);
 
 	let complexArray = new Array(len);

@@ -11,9 +11,6 @@ module.exports = {
       content: {
         type: Sequelize.STRING
       },
-      spectre: {
-        type: Sequelize.FLOAT
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

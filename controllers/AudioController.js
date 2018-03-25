@@ -6,7 +6,7 @@ const fftService  = require('./../services/fftService');
 
 const create = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
-	let err, audio, transformer, spectre;
+	let err, audio, transformer;
 	let user 	   = req.user;
 	let audio_info = req.body;
 
@@ -14,7 +14,6 @@ const create = async function(req, res){
 	if (!transformer) return ReE(res, err, 422);
 
 	audio_info.UserId  = user.id;
-	audio_info.spectre = fftService.analysisFFT(audio_info.content);
 	[err, audio] = await to(Audio.create(audio_info));
     if (err) return ReE(res, err, 422);
 

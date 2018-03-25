@@ -4,8 +4,7 @@ const Transformers          = require('../models').Transformers;
 
 module.exports = (sequelize, DataTypes) => {
    var Model = sequelize.define('Failures', {
-	    content     : {type: DataTypes.TEXT, allowNull: false}, 
-	    Spectre     : {type: DataTypes.FLOAT, allowNull: false},
+	    content     : {type: DataTypes.TEXT, allowNull: false},
   	});
 
   	Model.associate = function(models){

@@ -5,14 +5,13 @@ const fftService  = require('./../services/fftService');
 
 const create = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
-	let err, failure, transformer, spectre;
+	let err, failure, transformer;
 	let user 	   = req.user;
 	let failure_info = req.body;
 
 	transformer = await to(Transformer.findOne({where:{id: failure_info.transformerId}}));
 	if (!transformer) return ReE(res, err, 422);
 
-	failure_info.spectre = fftService.analysisFFT(failure_info.content);
 	[err, failure] = await to(Failure.create(failure_info));
     if (err) return ReE(res, err, 422);
 
