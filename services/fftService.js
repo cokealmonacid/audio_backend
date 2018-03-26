@@ -37,6 +37,13 @@ const analysisFFT = function(input_audio, input_failure){
 
 	let failure_FFT   = fastFourierTransform(y1_failure, zeros, len_failure);
 
+	return response = {
+		'sample'      : sampled_FFT,
+		'failure'     : failure_FFT,
+		'frequency_1' : frequency.frec1,
+		'frequency_2' : frequency.frec2
+	};
+
 }
 module.exports.analysisFFT = analysisFFT;
 
