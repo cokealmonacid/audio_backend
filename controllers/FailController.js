@@ -1,8 +1,6 @@
 const Failure		  = require('../models').Failures;
 const Transformer = require('../models').Transformers;
 
-const fftService  = require('./../services/fftService');
-
 const create = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
 	let err, failure, transformer;

@@ -1,9 +1,6 @@
 const Audio       = require('../models').Audios;
 const Transformer = require('../models').Transformers;
 
-const fftService  = require('./../services/fftService');
-
-
 const create = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
 	let err, audio, transformer;

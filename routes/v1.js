@@ -7,6 +7,7 @@ const path              = require('path');
 
 const UserController 	= require('./../controllers/UserController');
 const AudioController 	= require('./../controllers/AudioController');
+const FailController 	= require('./../controllers/FailController');
 
 require('./../middleware/passport')(passport)
 /* GET home page. */
@@ -22,5 +23,9 @@ router.post(	'/audios',			 passport.authenticate('jwt', {session:false}), AudioC
 router.get(		'/audios',			 passport.authenticate('jwt', {session:false}), AudioController.getAll);
 router.get(		'/audios/:audio_id', passport.authenticate('jwt', {session:false}), custom.audios, AudioController.show);
 router.delete(  '/audios/:audio_id', passport.authenticate('jwt', {session:false}), custom.audios, AudioController.remove);
+
+router.post(	'/failures',		   passport.authenticate('jwt', {session:false}), FailController.create);
+router.get(		'/failures',		   passport.authenticate('jwt', {session:false}), FailController.getAll);
+router.delete(  '/failures/:failure_id', passport.authenticate('jwt', {session:false}), custom.failures, FailController.remove);
 
 module.exports = router;
