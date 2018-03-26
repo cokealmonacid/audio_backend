@@ -17,6 +17,12 @@ module.exports = {
       crest: {
         type: Sequelize.FLOAT
       },
+      frequency_1: {
+        type: Sequelize.FLOAT
+      },
+      frequency_2: {
+        type: Sequelize.FLOAT
+      },
       Failure: {
         type: Sequelize.BOOLEAN
       },

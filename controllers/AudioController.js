@@ -43,6 +43,16 @@ const getAll = async function(req, res){
 }
 module.exports.getAll = getAll;
 
+const show = async function(req, res){
+
+	let audio = req.audio;
+
+	let audio_json = audio.toWeb();
+
+	return ReS(res, {audio: audio_json}, 201);
+}
+module.exports.show = show;
+
 const remove = async function(req, res){
 	let audio, err;
 	audio = req.audio;

@@ -21,8 +21,6 @@ const analysisFFT = function(input_audio, input_failure){
 	let sampled_FFT   = fastFourierTransform(y1, zeros, len_sampled);
 	let frequency     = rangeAnalysis(fsample, len_sampled);
 
-
-
 	/* 	FAILURE SAMPLED
 		Get the input on base64 encoded and create a new buffer 
 		then load the input and transform to sampled data
