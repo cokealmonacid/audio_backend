@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       content: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT('long')
       },
       code: {
         type: Sequelize.STRING
