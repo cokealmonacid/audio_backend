@@ -50,3 +50,24 @@ const getAll = async function(req, res){
 
 }
 module.exports.getAll = getAll;
+
+const show = async function(req, res){
+
+	let result = req.result;
+
+	let result_json = result.toWeb();
+
+	return ReS(res, {result: result_json}, 201);
+}
+module.exports.show = show;
+
+const remove = async function(req, res){
+	let result, err;
+	result = req.result;
+
+    [err, result] = await to(result.destroy());
+    if(err) return ReE(res, 'Un error se ha producido al intentar eliminar un reusltado de análisis');
+
+    return ReS(res, {message:'Resultado de análisis eliminado'}, 204);	
+}
+module.exports.remove = remove;

@@ -30,7 +30,7 @@ let failures = async function (req, res, next) {
 } 
 module.exports.failures = failures;
 
-let results = async function (req, res, next) {
+let create_results = async function (req, res, next) {
 	let failure_id, audio_id, failure, audio, err;
 	failure_id = req.params.failure_id;
 	audio_id   = req.params.audio_id;
@@ -50,4 +50,17 @@ let results = async function (req, res, next) {
 	req.user_id 	  = audio.UserId;
 	next();
 }
-module.exports.results = results;
+module.exports.create_results = create_results;
+
+let result = async function (req, res, next) {
+	let result_id, err, result;
+	result_id = req.params.result_id;
+
+	[err, result] = await to(Result.findOne({where:{id: result_id}}));
+	if (err) return ReS(res, "No se ha encontrado el resultado de análisis");
+	if (!result) return ReE(res, "Resultado de análisis no encontrado con id: "+result_id);
+
+	req.result = result;
+	next();
+}
+module.exports.result = result;

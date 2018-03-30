@@ -25,11 +25,13 @@ router.get(		'/audios',			 passport.authenticate('jwt', {session:false}), AudioC
 router.get(		'/audios/:audio_id', passport.authenticate('jwt', {session:false}), custom.audios, AudioController.show);
 router.delete(  '/audios/:audio_id', passport.authenticate('jwt', {session:false}), custom.audios, AudioController.remove);
 
-router.post(	'/failures',		   passport.authenticate('jwt', {session:false}), FailController.create);
-router.get(		'/failures',		   passport.authenticate('jwt', {session:false}), FailController.getAll);
+router.post(	'/failures',		     passport.authenticate('jwt', {session:false}), FailController.create);
+router.get(		'/failures',		     passport.authenticate('jwt', {session:false}), FailController.getAll);
 router.delete(  '/failures/:failure_id', passport.authenticate('jwt', {session:false}), custom.failures, FailController.remove);
 
-router.get(		'/results/:audio_id/:failure_id',  passport.authenticate('jwt', {session:false}), custom.results, ResultController.createAnalysis);
-router.get(     '/results',          passport.authenticate('jwt', {session:false}), ResultController.getAll);
+router.get(		'/results/:audio_id/:failure_id',  passport.authenticate('jwt', {session:false}), custom.create_results, ResultController.createAnalysis);
+router.get(     '/results',                        passport.authenticate('jwt', {session:false}), ResultController.getAll);
+router.get(		'/results/:result_id',             passport.authenticate('jwt', {session:false}), custom.result, ResultController.show);
+router.delete(  '/results/:result_id',             passport.authenticate('jwt', {session:false}), custom.result, ResultController.remove);
 
 module.exports = router;
