@@ -1,5 +1,6 @@
 const Audio				= 	require('./../models').Audios;
 const Failure			= 	require('./../models').Failures;
+const Result		    = require('../models').Results;
 
 let audios = async function (req, res, next) {
 	let audio_id, err, audio;
