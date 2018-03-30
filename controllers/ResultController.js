@@ -10,6 +10,7 @@ const createAnalysis = async function(req, res){
 	let results = await to(fftService.analysisFFT(audio, failure));
 
 	results = {
+		'UserId'		: results[1].user_id,
 		'AudioId'       : req.audio_id,
 		'TransformerId' : req.transformerId,
 		'rms_total'     : results[1].rms_total,

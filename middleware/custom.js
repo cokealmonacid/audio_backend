@@ -47,6 +47,7 @@ let results = async function (req, res, next) {
 	req.audio   	  = audio.content;
 	req.transformerId = audio.TransformerId;
 	req.audio_id 	  = audio.id;
+	req.user_id 	  = audio.UserId;
 	next();
 }
 module.exports.results = results;

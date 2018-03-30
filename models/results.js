@@ -9,8 +9,9 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Model.associate = function(models) {
-      this.Audios = this.belongsTo(models.Audios);
+      this.Audios       = this.belongsTo(models.Audios);
       this.Transformers = this.belongsTo(models.Transformers);
+      this.Users         = this.belongsTo(models.User);
   };
 
   Model.prototype.toWeb = function (pw) {
