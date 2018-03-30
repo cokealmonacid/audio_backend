@@ -1,53 +1,97 @@
 let wav 	= require('node-wav');
 let fft 	= require('./fft.js');
 let Complex = require('complex.js');
+let path    = require('path');
+let fs = require('fs');
 
-const analysisFFT = function(input_audio, input_failure){
+const analysisFFT = async function(input_audio, input_failure){
 
 	/* 	AUDIO SAMPLED
 		Get the input on base64 encoded and create a new buffer 
 		then load the input and transform to sampled data
 	*/
-	let buffer 		= new Buffer(input_audio, 'base64');
-	let result = wav.decode(buffer);
-	let fsample = result.sampleRate;
 
-	/* Define array fullfiled with zeros and another with sampled data */
-	let y1            = (result.channelData)[0];
-	let len_sampled   = y1.length;
-	let complex_array = new Array(len_sampled);
-	let zeros         = (new Array(len_sampled)).fill(0);
+	let sample = await new Promise(function(resolve, reject) {
+		fs.writeFile('services/input_audio.wav', input_audio, {encoding: 'base64'}, function(err) {
+			let buffer 	= fs.readFileSync('./services/input_audio.wav');
+			let result 	= wav.decode(buffer);
+			let fsample = result.sampleRate;
 
-	let sampled_FFT   = fastFourierTransform(y1, zeros, len_sampled);
-	let frequency     = rangeAnalysis(fsample, len_sampled);
+			/* Define array fullfiled with zeros and another with sampled data */
+			let y1            = (result.channelData)[0];
+			let len_sampled   = y1.length;
+			let complex_array = new Array(len_sampled);
+			let zeros         = (new Array(len_sampled)).fill(0);
+
+			let sampled_FFT   = fastFourierTransform(fsample, complex_array, y1, zeros, len_sampled);
+			let frequency     = rangeAnalysis(fsample, len_sampled);
+
+			response = {
+				'sample'      : sampled_FFT,
+				'frequency_1' : frequency.frec1,
+				'frequency_2' : frequency.frec2
+			}
+
+			resolve(response);
+		});
+	});
 
 	/* 	FAILURE SAMPLED
 		Get the input on base64 encoded and create a new buffer 
 		then load the input and transform to sampled data
 	*/
-	buffer_failure 		= new Buffer(input_failure, 'base64');
-	result_failure = wav.decode(buffer_failure);
-	fsample = result_failure.sampleRate;
+	let failure = await new Promise(function(resolve, reject){
+		fs.writeFile('services/input_failure.wav', input_audio, {encoding: 'base64'}, function(err) {
+			let buffer_failure = Buffer.from(input_failure, 'base64');
+			let result_failure = wav.decode(buffer_failure);
+			let fsample = result_failure.sampleRate;
 
-	/* Define array fullfiled with zeros and another with sampled data */
-	y1_failure    = (result_failure.channelData)[0];
-	len_failure   = y1_failure.length;
-	complex_array = new Array(len_failure);
-	zeros         = (new Array(len_failure)).fill(0);
+			/* Define array fullfiled with zeros and another with sampled data */
+			let y1_failure    = (result_failure.channelData)[0];
+			let len_failure   = y1_failure.length;
+			let complex_array = new Array(len_failure);
+			let zeros         = (new Array(len_failure)).fill(0);
 
-	let failure_FFT   = fastFourierTransform(y1_failure, zeros, len_failure);
+			let failure_FFT   = fastFourierTransform(fsample, complex_array, y1_failure, zeros, len_failure);
 
+			response = {
+				'failure' : failure_FFT
+			}
+
+			resolve(response);
+		});
+	});
+
+	let leng = sample.sample.length;
+	let difeEsp = new Array(leng);
+	for (let i = 0; i < leng; i++) {
+		difeEsp[i] = Math.abs(failure.failure[i] - sample.sample[i]) / sample.sample[i];
+	}
+
+	let rmstotal = average(difeEsp);
+	let rms      = average(difeEsp.slice(sample.frequency_1, sample.frequency_2));
+
+	let maxArray = difeEsp.slice(sample.frequency_1, sample.frequency_2);
+	let peak = maxArray[0];
+	for (let k = 0; k < maxArray.length; k++) {
+		if(peak < maxArray[k]) peak = maxArray[k];
+	}
+
+	let crest = peak/rms;
 	return response = {
-		'sample'      : sampled_FFT,
-		'failure'     : failure_FFT,
-		'frequency_1' : frequency.frec1,
-		'frequency_2' : frequency.frec2
-	};
+		peak      : peak,
+		crest     : crest,
+		rms_total : rmstotal,
+		failure   : (crest > 15) ? true : false
+	}
 
 }
 module.exports.analysisFFT = analysisFFT;
 
-function fastFourierTransform(sampled_array, zeros_array, len_sampled) {
+
+const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+
+function fastFourierTransform(fsample, complex_array, sampled_array, zeros, len_sampled) {
 	/* Fast Fourier Transform */
 	fft.transform(sampled_array, zeros);
 	for (let i = 0; i < len_sampled; i++) {
@@ -101,22 +145,24 @@ function rangeAnalysis(fsample, len_sampled) {
 
 function findIndexArray(value, direction, array) {
 
-	let response = -1;
 	let leng     = array.length;
 
-	if (direction == 'first') {
+	if (direction === 'first') {
 
 		for (let i = 0; i < leng; i++) {
+
 			if (array[i] > value) {
 				return i;
 			}
 		}
 	} else {
 
-		for (let i = leng; i > 0; i--) {
-			if (array[i] < value) {
-				return i;
+		for (let j = leng; j > 0; j--) {
+			if (array[j] < value) {
+				return j;
 			}
 		}
 	}
+
+	return -1;
 }

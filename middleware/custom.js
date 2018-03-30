@@ -43,8 +43,10 @@ let results = async function (req, res, next) {
 	if (err) return ReS(res, "No se ha encontrado la grabación de audio");
 	if (!audio) return ReE(res, "Audio no encontrado con id: "+audio_id);
 
-	req.failure = failure.content;
-	req.audio   = audio.content;
+	req.failure 	  = failure.content;
+	req.audio   	  = audio.content;
+	req.transformerId = audio.TransformerId;
+	req.audio_id 	  = audio.id;
 	next();
 }
 module.exports.results = results;

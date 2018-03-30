@@ -5,10 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       rms_total   : {type: DataTypes.FLOAT, allowNull: false},
       peak        : {type: DataTypes.FLOAT, allowNull: false},
       crest       : {type: DataTypes.FLOAT, allowNull: false},
-      frequency_1 : {type: DataTypes.FLOAT, allowNull: false},
-      frequency_2 : {type: DataTypes.FLOAT, allowNull: false},
-      failure     : {type: DataTypes.BOOLEAN, allowNull: false},
-      date_result : {type: DataTypes.DATEONLY, allowNull: false},
+      failure     : {type: DataTypes.BOOLEAN, allowNull: false}
   });
 
   Model.associate = function(models) {
