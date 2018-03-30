@@ -10,7 +10,7 @@ const createAnalysis = async function(req, res){
 	let results = await to(fftService.analysisFFT(audio, failure));
 
 	results = {
-		'UserId'		: results[1].user_id,
+		'UserId'		: req.user_id,
 		'AudioId'       : req.audio_id,
 		'TransformerId' : req.transformerId,
 		'rms_total'     : results[1].rms_total,
@@ -29,3 +29,24 @@ const createAnalysis = async function(req, res){
 	return ReS(res, {results: result_json}, 201);
 }
 module.exports.createAnalysis = createAnalysis;
+
+const getAll = async function(req, res){
+	res.setHeader('Content-Type', 'application/json');
+	let user = req.user;
+	let err, results;
+
+	[err, results] = await to(Result.findAll({where:{UserId: user.id}}));
+	if (err) return ReE(res, err, 422);
+
+	let results_json = [];
+	for (let i in results) {
+		let result = results[i];
+		let results_info = result.toWeb();
+
+		results_json.push(results_info);
+	}
+
+	return ReS(res, {results: results_json});
+
+}
+module.exports.getAll = getAll;

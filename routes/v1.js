@@ -29,6 +29,7 @@ router.post(	'/failures',		   passport.authenticate('jwt', {session:false}), Fai
 router.get(		'/failures',		   passport.authenticate('jwt', {session:false}), FailController.getAll);
 router.delete(  '/failures/:failure_id', passport.authenticate('jwt', {session:false}), custom.failures, FailController.remove);
 
-router.get(		'/results/:audio_id/:failure_id',  passport.authenticate('jwt', {session: false}), custom.results, ResultController.createAnalysis);
+router.get(		'/results/:audio_id/:failure_id',  passport.authenticate('jwt', {session:false}), custom.results, ResultController.createAnalysis);
+router.get(     '/results',          passport.authenticate('jwt', {session:false}), ResultController.getAll);
 
 module.exports = router;
