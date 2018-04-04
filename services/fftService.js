@@ -1,7 +1,7 @@
-let wav 	= require('node-wav');
-let fft 	= require('./fft.js');
-let Complex = require('complex.js');
-let path    = require('path');
+let wav 	     = require('node-wav');
+let fft 	     = require('./fft.js');
+let Complex      = require('complex.js');
+let path         = require('path');
 let fs = require('fs');
 
 const analysisFFT = async function(input_audio, input_failure){
@@ -12,8 +12,9 @@ const analysisFFT = async function(input_audio, input_failure){
 	*/
 
 	let sample = await new Promise(function(resolve, reject) {
-		fs.writeFile('services/input_audio.wav', input_audio, {encoding: 'base64'}, function(err) {
-			let buffer 	= fs.readFileSync('./services/input_audio.wav');
+		fs.writeFile('services/input_audio.aac', input_audio, {encoding: 'base64'}, function(err) {
+
+			let buffer  = fs.readFileSync('./services/input_audio.aac');
 			let result 	= wav.decode(buffer);
 			let fsample = result.sampleRate;
 
@@ -41,8 +42,9 @@ const analysisFFT = async function(input_audio, input_failure){
 		then load the input and transform to sampled data
 	*/
 	let failure = await new Promise(function(resolve, reject){
-		fs.writeFile('services/input_failure.wav', input_audio, {encoding: 'base64'}, function(err) {
-			let buffer_failure = Buffer.from(input_failure, 'base64');
+		fs.writeFile('services/input_failure.aac', input_failure, {encoding: 'base64'}, function(err) {
+
+			let buffer_failure 	= fs.readFileSync('./services/input_failure.aac');
 			let result_failure = wav.decode(buffer_failure);
 			let fsample = result_failure.sampleRate;
 

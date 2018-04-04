@@ -12,6 +12,7 @@ const createAnalysis = async function(req, res){
 	results = {
 		'UserId'		: req.user_id,
 		'AudioId'       : req.audio_id,
+		'FailureId'     : req.failure_id,
 		'TransformerId' : req.transformerId,
 		'rms_total'     : results[1].rms_total,
 		'crest'			: results[1].crest,

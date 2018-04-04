@@ -49,6 +49,7 @@ let create_results = async function (req, res, next) {
 	req.transformerId = audio.TransformerId;
 	req.audio_id 	  = audio.id;
 	req.user_id 	  = audio.UserId;
+	req.failure_id	  = failure.id;
 	next();
 }
 module.exports.create_results = create_results;

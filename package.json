@@ -9,6 +9,7 @@
   "license": "ISC",
   "description": "API REST for audioApp",
   "dependencies": {
+    "audiobuffer-to-wav": "^1.0.0",
     "bcrypt": "^1.0.3",
     "bcrypt-promise": "^2.0.0",
     "body-parser": "~1.18.2",
@@ -28,6 +29,7 @@
     "sequelize": "^4.36.0",
     "sequelize-cli": "^4.0.0",
     "serve-favicon": "~2.4.5",
-    "validator": "^9.2.0"
+    "validator": "^9.2.0",
+    "web-audio-api": "^0.2.2"
   }
 }

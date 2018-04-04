@@ -5,10 +5,11 @@ const custom 	        = require('./../middleware/custom');
 const passport      	= require('passport');
 const path              = require('path');
 
-const UserController 	= require('./../controllers/UserController');
-const AudioController 	= require('./../controllers/AudioController');
-const FailController 	= require('./../controllers/FailController');
-const ResultController 	= require('./../controllers/ResultController');
+const UserController 			= require('./../controllers/UserController');
+const AudioController 			= require('./../controllers/AudioController');
+const FailController 			= require('./../controllers/FailController');
+const ResultController 			= require('./../controllers/ResultController');
+const TransformerController 	= require('./../controllers/TransformerController');
 
 require('./../middleware/passport')(passport)
 /* GET home page. */
@@ -19,6 +20,8 @@ router.get('/', function(req, res, next) {
 router.post(    '/users',           UserController.create);
 router.get(     '/users',           passport.authenticate('jwt', {session:false}), UserController.get);   
 router.post(    '/users/login',     UserController.login);
+
+router.get(      '/transformers',   passport.authenticate('jwt', {session: false}), TransformerController.getAll);
 
 router.post(	'/audios',			 passport.authenticate('jwt', {session:false}), AudioController.create);
 router.get(		'/audios',			 passport.authenticate('jwt', {session:false}), AudioController.getAll);
