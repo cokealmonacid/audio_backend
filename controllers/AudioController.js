@@ -25,7 +25,7 @@ module.exports.create = create;
 const getAll = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
 	let user = req.user;
-	let err, audios, result;
+	let err, audios, transformer;
 
 	[err, audios] = await to(Audio.findAll({where:{UserId: user.id}}));
 	if (err) return ReE(res, err, 422);
@@ -33,8 +33,20 @@ const getAll = async function(req, res){
 	let audios_json = [];
 	for (let i in audios){
 		let audio = audios[i];
-		let audio_info = audio.toWeb();
-		audios_json.push(audio_info);
+
+		transformer = await to(Transformer.findOne({where:{id: audio.TransformerId}}));
+		if (!transformer) return ReE(res, err, 422);
+
+		let audio_resp = {
+			'id'  : audio.id,
+			'date': audio.createdAt,
+			'code': audio.code,
+			'analysis': audio.analysis,
+			'transformer_brand': transformer[1].brand,
+			'transformer_model': transformer[1].model
+		}
+
+		audios_json.push(audio_resp);
 	}
 
 	return ReS(res, {audios: audios_json});
