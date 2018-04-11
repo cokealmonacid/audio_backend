@@ -1,4 +1,5 @@
 const Result		  = require('../models').Results;
+const Audio       = require('../models').Audios;
 const fftService      = require('./../services/fftService');
 
 const createAnalysis = async function(req, res){
@@ -23,6 +24,11 @@ const createAnalysis = async function(req, res){
 	console.log(typeof results);
 
 	[err, response]      = await to(Result.create(results));
+	if (err) return ReE(res, err, 422);
+
+	[err, audio] = await to(Audio.findOne({where: {id: req.audio_id}}));
+	audio.analysis = true;
+	[err, audio] = await to(Audio.save());
 	if (err) return ReE(res, err, 422);
 
 	let result_json = response.toWeb();

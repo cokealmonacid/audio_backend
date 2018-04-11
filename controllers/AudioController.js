@@ -1,5 +1,6 @@
 const Audio       = require('../models').Audios;
 const Transformer = require('../models').Transformers;
+const Result 	  = require('../models').Results;
 
 const create = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
@@ -10,7 +11,8 @@ const create = async function(req, res){
 	transformer = await to(Transformer.findOne({where:{id: audio_info.transformerId}}));
 	if (!transformer) return ReE(res, err, 422);
 
-	audio_info.UserId  = user.id;
+	audio_info.UserId   = user.id;
+	audio_info.analysis = false;
 	[err, audio] = await to(Audio.create(audio_info));
     if (err) return ReE(res, err, 422);
 
@@ -23,7 +25,7 @@ module.exports.create = create;
 const getAll = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
 	let user = req.user;
-	let err, audios;
+	let err, audios, result;
 
 	[err, audios] = await to(Audio.findAll({where:{UserId: user.id}}));
 	if (err) return ReE(res, err, 422);
@@ -32,7 +34,6 @@ const getAll = async function(req, res){
 	for (let i in audios){
 		let audio = audios[i];
 		let audio_info = audio.toWeb();
-
 		audios_json.push(audio_info);
 	}
 
