@@ -28,7 +28,7 @@ const createAnalysis = async function(req, res){
 
 	[err, audio] = await to(Audio.findOne({where: {id: req.audio_id}}));
 	audio.analysis = true;
-	[err, audio] = await to(Audio.save());
+	[err, audio] = await to(audio.save());
 	if (err) return ReE(res, err, 422);
 
 	let result_json = response.toWeb();

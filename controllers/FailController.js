@@ -13,7 +13,10 @@ const create = async function(req, res){
 	[err, failure] = await to(Failure.create(failure_info));
     if (err) return ReE(res, err, 422);
 
-    let failure_json = failure.toWeb();
+    let failure_json = {
+    	'id' : failure.id,
+    	'description': failure.description
+    }
 
 	return ReS(res, {failure: failure_json}, 201);
 }
