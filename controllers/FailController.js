@@ -33,7 +33,10 @@ const getAll = async function(req, res){
 	let failures_json = [];
 	for (let i in failures){
 		let failure = failures[i];
-		let failure_info = failure.toWeb();
+		let failure_info = {
+			'failure_id'          : failure.id,
+			'failure_description' : failure.description 
+		}
 
 		failures_json.push(failure_info);
 	}
