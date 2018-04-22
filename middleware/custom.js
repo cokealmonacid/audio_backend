@@ -1,6 +1,7 @@
 const Audio				= 	require('./../models').Audios;
 const Failure			= 	require('./../models').Failures;
-const Result		    = require('../models').Results;
+const Result		    = 	require('./../models').Results;
+const Transformer		= 	require('./../models').Transformers;
 
 let audios = async function (req, res, next) {
 	let audio_id, err, audio;
@@ -66,3 +67,16 @@ let result = async function (req, res, next) {
 	next();
 }
 module.exports.result = result;
+
+let transformer = async function (req, res, next) {
+	let transformer_id, err, transformer;
+	transformer_id = req.params.transformer_id;
+
+	[err, transformer] = await to(Transformer.findOne({where:{id: transformer_id}}));
+	if (err) return ReS(res, "No se ha encontrado el transformador solicitado");
+	if (!transformer) return ReE(res, "Transformador no encontrado con id:"+transformer_id);
+
+	req.transformer = transformer;
+	next();
+}
+module.exports.transformer = transformer;

@@ -10,6 +10,7 @@ const AudioController 			= require('./../controllers/AudioController');
 const FailController 			= require('./../controllers/FailController');
 const ResultController 			= require('./../controllers/ResultController');
 const TransformerController 	= require('./../controllers/TransformerController');
+const CodeController            = require('./../controllers/CodeController')
 
 require('./../middleware/passport')(passport)
 /* GET home page. */
@@ -36,5 +37,8 @@ router.get(		'/results/:audio_id/:failure_id',  passport.authenticate('jwt', {se
 router.get(     '/results',                        passport.authenticate('jwt', {session:false}), ResultController.getAll);
 router.get(		'/results/:result_id',             passport.authenticate('jwt', {session:false}), custom.result, ResultController.show);
 router.delete(  '/results/:result_id',             passport.authenticate('jwt', {session:false}), custom.result, ResultController.remove);
+
+router.get(     '/codes/:transformer_id',          passport.authenticate('jwt', {session:false}), custom.transformer, CodeController.getAll);
+router.post(    '/codes'                ,          passport.authenticate('jwt', {session:false}), CodeController.create);
 
 module.exports = router;
