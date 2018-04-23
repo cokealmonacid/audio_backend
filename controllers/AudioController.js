@@ -1,16 +1,19 @@
 const Audio       = require('../models').Audios;
 const Transformer = require('../models').Transformers;
-const Result 	  = require('../models').Results;
 const Failure     = require('../models').Failures;
+const Code        = require('../models').Codes;
 
 const create = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
-	let err, audio, transformer;
+	let err, audio, transformer, code;
 	let user 	   = req.user;
 	let audio_info = req.body;
 
 	transformer = await to(Transformer.findOne({where:{id: audio_info.transformerId}}));
 	if (!transformer) return ReE(res, err, 422);
+
+	code = await to(Code.findOne({where:{id: audio_info.codeId}}));
+	if (!code) return ReE(res, err, 422);
 
 	audio_info.UserId   = user.id;
 	audio_info.analysis = false;
@@ -18,8 +21,7 @@ const create = async function(req, res){
     if (err) return ReE(res, err, 422);
 
     let audio_json = {
-    	'id' : audio.id,
-    	'code': audio.code
+    	'id' : audio.id
     }
 
 	return ReS(res, {audio: audio_json}, 201);
@@ -29,7 +31,7 @@ module.exports.create = create;
 const getAll = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
 	let user = req.user;
-	let err, audios, transformer;
+	let err, audios, transformer, code;
 
 	[err, audios] = await to(Audio.findAll({where:{UserId: user.id}}));
 	if (err) return ReE(res, err, 422);
@@ -41,11 +43,13 @@ const getAll = async function(req, res){
 		transformer = await to(Transformer.findOne({where:{id: audio.TransformerId}}));
 		if (!transformer) return ReE(res, err, 422);
 
+		code = await to(Code.findOne({where:{id: audio.CodeId}}));
+		if (!code) return ReE(res, err, 422);
+
 		let audio_resp = {
 			'id'  : audio.id,
 			'date': audio.createdAt,
-			'code': audio.code,
-			'analysis': audio.analysis,
+			'code': code[1].description,
 			'transformer_brand': transformer[1].brand,
 			'transformer_model': transformer[1].model
 		}
@@ -58,44 +62,23 @@ const getAll = async function(req, res){
 module.exports.getAll = getAll;
 
 const show = async function(req, res){
-
+	let transformer, code;
 	let audio = req.audio;
 
 	transformer = await to(Transformer.findOne({where:{id: audio.TransformerId}}));
 	if (!transformer) return ReE(res, err, 422);
 
+	code = await to(Code.findOne({where:{id: audio.CodeId}}));
+	if (!code) return ReE(res, err, 422);
+
 	let audio_resp = {
 		'id'  : audio.id,
 		'date': audio.createdAt,
-		'code': audio.code,
+		'code': code[1].description,
 		'analysis': audio.analysis,
 		'content' : audio.content,
 		'transformer_brand': transformer[1].brand,
 		'transformer_model': transformer[1].model
-	}
-
-	let results_json = [];
-	if (audio.analysis) {
-		let results = await to(Result.findAll({where: {AudioId: audio.id}}));
-		if (!results) return ReE(res, err, 422);
-
-		results = results[1];
-
-		for (let i in results){
-			let result = results[i];
-			let failure = await to(Failure.findOne({where: {id: result.FailureId}}));
-			if (!failure) return ReE(res, err, 422);
-
-			failure = failure[1];
-			audio_results = {
-				'failure_name'    : failure.description,
-				'result_analysis' : result.failure
-			}
-
-			results_json.push(audio_results);
-		}
-
-		audio_resp.results = results_json;
 	}
 
 	return ReS(res, {audio: audio_resp}, 201);

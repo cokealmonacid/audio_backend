@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   Model.associate = function(models) {
       this.Users = this.belongsTo(models.User);
       this.Transformers = this.belongsTo(models.Transformers);
+      this.Codes = this.belongsTo(models.Code);
   };
 
   Model.prototype.toWeb = function (pw) {

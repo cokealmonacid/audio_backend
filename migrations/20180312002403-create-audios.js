@@ -11,9 +11,6 @@ module.exports = {
       content: {
         type: Sequelize.TEXT('long')
       },
-      code: {
-        type: Sequelize.STRING
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

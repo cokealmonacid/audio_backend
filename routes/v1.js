@@ -8,7 +8,6 @@ const path              = require('path');
 const UserController 			= require('./../controllers/UserController');
 const AudioController 			= require('./../controllers/AudioController');
 const FailController 			= require('./../controllers/FailController');
-const ResultController 			= require('./../controllers/ResultController');
 const TransformerController 	= require('./../controllers/TransformerController');
 const CodeController            = require('./../controllers/CodeController')
 
@@ -32,11 +31,6 @@ router.delete(  '/audios/:audio_id', passport.authenticate('jwt', {session:false
 router.post(	'/failures',		     passport.authenticate('jwt', {session:false}), FailController.create);
 router.get(		'/failures',		     passport.authenticate('jwt', {session:false}), FailController.getAll);
 router.delete(  '/failures/:failure_id', passport.authenticate('jwt', {session:false}), custom.failures, FailController.remove);
-
-router.get(		'/results/:audio_id/:failure_id',  passport.authenticate('jwt', {session:false}), custom.create_results, ResultController.createAnalysis);
-router.get(     '/results',                        passport.authenticate('jwt', {session:false}), ResultController.getAll);
-router.get(		'/results/:result_id',             passport.authenticate('jwt', {session:false}), custom.result, ResultController.show);
-router.delete(  '/results/:result_id',             passport.authenticate('jwt', {session:false}), custom.result, ResultController.remove);
 
 router.get(     '/codes/:transformer_id',          passport.authenticate('jwt', {session:false}), custom.transformer, CodeController.getAll);
 router.post(    '/codes'                ,          passport.authenticate('jwt', {session:false}), CodeController.create);
