@@ -8,10 +8,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      name_s_e: {
+        type: Sequelize.STRING
+      },
+      designation: {
+        type: Sequelize.STRING
+      },
       brand: {
         type: Sequelize.STRING
       },
-      model: {
+      trans_rel: {
         type: Sequelize.STRING
       },
       year: {

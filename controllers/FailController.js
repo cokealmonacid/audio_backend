@@ -1,14 +1,10 @@
 const Failure		  = require('../models').Failures;
-const Transformer = require('../models').Transformers;
 
 const create = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
-	let err, failure, transformer;
+	let err, failure;
 	let user 	   = req.user;
 	let failure_info = req.body;
-
-	transformer = await to(Transformer.findOne({where:{id: failure_info.transformerId}}));
-	if (!transformer) return ReE(res, err, 422);
 
 	[err, failure] = await to(Failure.create(failure_info));
     if (err) return ReE(res, err, 422);

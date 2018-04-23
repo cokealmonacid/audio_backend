@@ -3,7 +3,6 @@
 module.exports = (sequelize, DataTypes) => {
   var Model = sequelize.define('Audios', {
     content     : {type: DataTypes.TEXT('long'), allowNull: false}, 
-    code        : {type: DataTypes.STRING, allowNull: false},
     analysis    : {type: DataTypes.BOOLEAN, allowNull: false}
   });
 
