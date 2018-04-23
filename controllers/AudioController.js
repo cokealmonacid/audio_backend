@@ -3,9 +3,11 @@ const Transformer = require('../models').Transformers;
 const Failure     = require('../models').Failures;
 const Code        = require('../models').Codes;
 
+const fftService      = require('./../services/fftService');
+
 const create = async function(req, res){
 	res.setHeader('Content-Type', 'application/json');
-	let err, audio, transformer, code;
+	let err, audio, transformer, code, failures;
 	let user 	   = req.user;
 	let audio_info = req.body;
 
@@ -17,12 +19,23 @@ const create = async function(req, res){
 
 	audio_info.UserId   = user.id;
 	audio_info.analysis = false;
-	[err, audio] = await to(Audio.create(audio_info));
-    if (err) return ReE(res, err, 422);
+	failures = await to(Failures.findAll());
+	if (!failures) return ReE(res, err, 422);
 
-    let audio_json = {
-    	'id' : audio.id
-    }
+	failures.forEach(function(failure) {
+		let results = await to(fftService.analysisFFT(audio.content, failure.content));
+		if (results[1].failure) {
+			audio_info.analysis = true;
+			break;
+		}
+	});
+
+	[err, audio] = await to(Audio.create(audio_info));
+	if (err) return ReE(res, err, 422);
+
+	let audio_json = {
+		'id' : audio.id
+	}
 
 	return ReS(res, {audio: audio_json}, 201);
 }
