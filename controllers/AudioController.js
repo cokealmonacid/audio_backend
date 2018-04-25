@@ -23,7 +23,6 @@ const create = async function(req, res){
 	if (!failures) return ReE(res, err, 422);
 
 	failures = failures[1];
-
 	for (let i in failures) {
 		let failure = failures[i];
 		let results = await to(fftService.analysisFFT(audio_info.content, failure.content));
@@ -37,7 +36,8 @@ const create = async function(req, res){
 	if (err) return ReE(res, err, 422);
 
 	let audio_json = {
-		'id' : audio.id
+		'id' : audio.id,
+		'results' : audio.analysis
 	}
 
 	return ReS(res, {audio: audio_json}, 201);

@@ -2,6 +2,9 @@ let wav 	     = require('node-wav');
 let fft 	     = require('./fft.js');
 let Complex      = require('complex.js');
 let path         = require('path');
+let toWav = require('audiobuffer-to-wav');
+let AudioContext = require('web-audio-api').AudioContext;
+let audioContext = new AudioContext;
 let fs = require('fs');
 
 const analysisFFT = async function(input_audio, input_failure){
@@ -14,26 +17,29 @@ const analysisFFT = async function(input_audio, input_failure){
 	let sample = await new Promise(function(resolve, reject) {
 		fs.writeFile('services/input_audio.aac', input_audio, {encoding: 'base64'}, function(err) {
 
-			let buffer  = fs.readFileSync('./services/input_audio.aac');
-			let result 	= wav.decode(buffer);
-			let fsample = result.sampleRate;
+			let readed  = fs.readFileSync('./services/input_audio.aac');
+			audioContext.decodeAudioData(readed, buffer => {
+				let wav_buffer = toWav(buffer);
+				let result 	   = wav.decode(wav_buffer);
+				let fsample    = result.sampleRate;
 
-			/* Define array fullfiled with zeros and another with sampled data */
-			let y1            = (result.channelData)[0];
-			let len_sampled   = y1.length;
-			let complex_array = new Array(len_sampled);
-			let zeros         = (new Array(len_sampled)).fill(0);
+				/* Define array fullfiled with zeros and another with sampled data */
+				let y1            = (result.channelData)[0];
+				let len_sampled   = y1.length;
+				let complex_array = new Array(len_sampled);
+				let zeros         = (new Array(len_sampled)).fill(0);
 
-			let sampled_FFT   = fastFourierTransform(fsample, complex_array, y1, zeros, len_sampled);
-			let frequency     = rangeAnalysis(fsample, len_sampled);
+				let sampled_FFT   = fastFourierTransform(fsample, complex_array, y1, zeros, len_sampled);
+				let frequency     = rangeAnalysis(fsample, len_sampled);
 
-			response = {
-				'sample'      : sampled_FFT,
-				'frequency_1' : frequency.frec1,
-				'frequency_2' : frequency.frec2
-			}
+				response = {
+					'sample'      : sampled_FFT,
+					'frequency_1' : frequency.frec1,
+					'frequency_2' : frequency.frec2
+				}
 
-			resolve(response);
+				resolve(response);
+			});
 		});
 	});
 
@@ -44,23 +50,26 @@ const analysisFFT = async function(input_audio, input_failure){
 	let failure = await new Promise(function(resolve, reject){
 		fs.writeFile('services/input_failure.aac', input_failure, {encoding: 'base64'}, function(err) {
 
-			let buffer_failure 	= fs.readFileSync('./services/input_failure.aac');
-			let result_failure = wav.decode(buffer_failure);
-			let fsample = result_failure.sampleRate;
+			let readed	= fs.readFileSync('./services/input_failure.aac');
+			audioContext.decodeAudioData(readed, buffer =>{
+				let wav_buffer = toWav(buffer);
+				let result_failure = wav.decode(wav_buffer);
+				let fsample = result_failure.sampleRate;
 
-			/* Define array fullfiled with zeros and another with sampled data */
-			let y1_failure    = (result_failure.channelData)[0];
-			let len_failure   = y1_failure.length;
-			let complex_array = new Array(len_failure);
-			let zeros         = (new Array(len_failure)).fill(0);
+				/* Define array fullfiled with zeros and another with sampled data */
+				let y1_failure    = (result_failure.channelData)[0];
+				let len_failure   = y1_failure.length;
+				let complex_array = new Array(len_failure);
+				let zeros         = (new Array(len_failure)).fill(0);
 
-			let failure_FFT   = fastFourierTransform(fsample, complex_array, y1_failure, zeros, len_failure);
+				let failure_FFT   = fastFourierTransform(fsample, complex_array, y1_failure, zeros, len_failure);
 
-			response = {
-				'failure' : failure_FFT
-			}
+				response = {
+					'failure' : failure_FFT
+				}
 
-			resolve(response);
+				resolve(response);
+			});
 		});
 	});
 
