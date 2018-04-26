@@ -59,15 +59,12 @@ const getAll = async function(req, res){
 		transformer = await to(Transformer.findOne({where:{id: audio.TransformerId}}));
 		if (!transformer) return ReE(res, err, 422);
 
-		code = await to(Code.findOne({where:{id: audio.CodeId}}));
-		if (!code) return ReE(res, err, 422);
-
 		let audio_resp = {
 			'id'  : audio.id,
-			'date': audio.createdAt,
-			'code': code[1].description,
+			'date': parseDate(audio.createdAt),
+			'transformer_name': transformer[1].name_s_e,
 			'transformer_brand': transformer[1].brand,
-			'transformer_model': transformer[1].model
+			'transformer_designation': transformer[1].designation
 		}
 
 		audios_json.push(audio_resp);
@@ -89,12 +86,14 @@ const show = async function(req, res){
 
 	let audio_resp = {
 		'id'  : audio.id,
-		'date': audio.createdAt,
+		'date': parseDate(audio.createdAt),
 		'code': code[1].description,
 		'analysis': audio.analysis,
-		'content' : audio.content,
+		'transformer_name': transformer[1].name_s_e,
 		'transformer_brand': transformer[1].brand,
-		'transformer_model': transformer[1].model
+		'transformer_designation': transformer[1].designation,
+		'transformer_year': transformer[1].year,
+		'transformer_trans': transformer[1].trans_rel
 	}
 
 	return ReS(res, {audio: audio_resp}, 201);
@@ -111,3 +110,15 @@ const remove = async function(req, res){
     return ReS(res, {message:'Grabación de audio eliminada'}, 204);	
 }
 module.exports.remove = remove;
+
+const parseDate = function(date) {
+	let year  = date.getUTCFullYear();
+	let month = date.getUTCMonth() + 1;
+	let day   = date.getUTCDate(); 
+	if (month < 10) {
+		month = '0'+month;
+	}
+
+	let new_date = `${day+'/'+month+'/'+year}`;
+	return new_date;
+}
