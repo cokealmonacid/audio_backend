@@ -61,6 +61,7 @@ const getAll = async function(req, res){
 
 		let audio_resp = {
 			'id'  : audio.id,
+			'name': audio.name,
 			'date': parseDate(audio.createdAt),
 			'transformer_name': transformer[1].name_s_e,
 			'transformer_brand': transformer[1].brand,
