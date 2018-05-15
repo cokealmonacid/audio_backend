@@ -29,7 +29,7 @@ const create = async function(req, res){
 		let results = await to(fftService.analysisFFT(audio_info.content, failure.content));
 		if (results[1].failure) {
 			audio_info.analysis = true;
-			crest = failure.crest;
+			crest = results[1].crest;
 			break;
 		}
 	}
