@@ -93,7 +93,7 @@ const analysisFFT = async function(input_audio, input_failure){
 		peak      : peak,
 		crest     : crest,
 		rms_total : rmstotal,
-		failure   : (crest > 150) ? true : false
+		failure   : (crest > 350) ? true : false
 	}
 
 }
