@@ -9,7 +9,8 @@ const UserController 			= require('./../controllers/UserController');
 const AudioController 			= require('./../controllers/AudioController');
 const FailController 			= require('./../controllers/FailController');
 const TransformerController 	= require('./../controllers/TransformerController');
-const CodeController            = require('./../controllers/CodeController')
+const CodeController            = require('./../controllers/CodeController');
+const ContactController         = require('./../controllers/ContactController');
 
 require('./../middleware/passport')(passport)
 /* GET home page. */
@@ -34,5 +35,7 @@ router.delete(  '/failures/:failure_id', passport.authenticate('jwt', {session:f
 
 router.get(     '/codes/:transformer_id',          passport.authenticate('jwt', {session:false}), custom.transformer, CodeController.getAll);
 router.post(    '/codes'                ,          passport.authenticate('jwt', {session:false}), CodeController.create);
+
+router.get(     '/contact',         passport.authenticate('jwt', {session:false}), ContactController.getAll);
 
 module.exports = router;

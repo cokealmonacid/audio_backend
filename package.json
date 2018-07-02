@@ -22,6 +22,7 @@
     "morgan": "~1.9.0",
     "mysql2": "^1.5.1",
     "node-wav": "0.0.2",
+    "nodemailer": "^4.6.7",
     "nodemon": "^1.17.2",
     "parse-error": "^0.2.0",
     "passport": "^0.4.0",
