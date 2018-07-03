@@ -37,5 +37,6 @@ router.get(     '/codes/:transformer_id',          passport.authenticate('jwt', 
 router.post(    '/codes'                ,          passport.authenticate('jwt', {session:false}), CodeController.create);
 
 router.get(     '/contact',         passport.authenticate('jwt', {session:false}), ContactController.getAll);
+router.post(    '/contact/email',   passport.authenticate('jwt', {session:false}), custom.contact, ContactController.sendEmail);
 
 module.exports = router;

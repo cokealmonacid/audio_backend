@@ -19,7 +19,6 @@ const getAll = async function(req, res){
 }
 module.exports.getAll = getAll;
 
-// process.env.APP
 const sendEmail = async function(req, res){
 	let audio, contact;
 	audio   = req.audio;
@@ -37,15 +36,21 @@ const sendEmail = async function(req, res){
 		from    : process.env.EMAIL_USER,
 		to      : contact,
 		subject : 'Correo con reporte de falla en grabación de transformador',
-		text    : 'Esto es una prueba',
-		//html
+		html    : 
+		`<h3>Reporte de audio</h3>
+		<p><strong>Nombre grabación: </strong>${audio.name}</p>
+		<p><strong>Resultado Análisis: </strong>${audio.analysis}</p>
+		<p><strong>Transformador: </strong>${audio.transformer}</p>
+		<p><strong>Nº Serie: </strong>${audio.code}</p>
+		<p><strong>Usuario: </strong>${audio.user}</p>
+		`
 	}
 
-	transporter.sendEmail(mailOptions, function(err, info){
-		if (error) {
-			console.log(error);
+	transporter.sendMail(mailOptions, function(err, info){
+		if (err) {
+			return ReE(res, err);
 		} else {
-			console.log('Email sent:', info);
+			return ReS(res, {message: 'Se ha enviado un informe por correo electrónico'});
 		}
 	})
 
