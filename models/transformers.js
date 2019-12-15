@@ -2,9 +2,11 @@
 
 module.exports = (sequelize, DataTypes) => {
 	var Model = sequelize.define('Transformers', {
-	    brand : {type: DataTypes.STRING, allowNull: false, unique: false},
-	    model : {type: DataTypes.STRING, allowNull: false, unique: false},
-	    year  : {type: DataTypes.INTEGER, allowNull: false, unique: false},
+		name_s_e    : {type: DataTypes.STRING, allowNull: false, unique: false},
+		designation : {type: DataTypes.STRING, allowNull: false, unique: false},
+	    brand       : {type: DataTypes.STRING, allowNull: false, unique: false},
+	    trans_rel   : {type: DataTypes.STRING, allowNull: false, unique: false},
+	    year        : {type: DataTypes.INTEGER, allowNull: false, unique: false},
 	});
 
  	Model.prototype.toWeb = function (pw) {

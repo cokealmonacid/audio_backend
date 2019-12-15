@@ -1,24 +1,20 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Results', {
+    return queryInterface.createTable('Contacts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      rms_total: {
-        type: Sequelize.FLOAT
+      email: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          unique: true
       },
-      peak: {
-        type: Sequelize.FLOAT
-      },
-      crest: {
-        type: Sequelize.FLOAT
-      },
-      Failure: {
-        type: Sequelize.BOOLEAN
+      name: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -31,6 +27,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Results');
+    return queryInterface.dropTable('Contacts');
   }
 };

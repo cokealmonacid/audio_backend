@@ -9,16 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       content: {
-        type: Sequelize.STRING
-      },
-      spectre: {
-        type: Sequelize.FLOAT
-      },
-      date_sample: {
-        type: Sequelize.DATE
-      },
-      code: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT('long')
       },
       createdAt: {
         allowNull: false,
